@@ -19,7 +19,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
-	defer listen.Close()
+	defer func(listen net.Listener) {
+		err := listen.Close()
+		if err != nil {
+			log.Fatalf("Failed to close listener: %v", err)
+		}
+	}(listen)
 	log.Printf("Server listening at %v", address)
 
 	server := grpc.NewServer()

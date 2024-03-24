@@ -14,7 +14,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to dial server: %v", err)
 	}
-	defer conn.Close()
+	defer func(conn *grpc.ClientConn) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatalf("Failed to close connection: %v", err)
+		}
+	}(conn)
 
 	client := pb.NewGreetServiceClient(conn)
 	doGreet(client)
