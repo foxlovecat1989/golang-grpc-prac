@@ -22,5 +22,11 @@ func main() {
 	}(conn)
 
 	client := pb.NewGreetServiceClient(conn)
+
 	doGreet(client)
+
+	err = doGreetManyTimes(client)
+	if err != nil {
+		log.Fatalf("Failed to do greet many times: %v", err)
+	}
 }
